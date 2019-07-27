@@ -14,16 +14,15 @@ class FeedMachineSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
-      margin: EdgeInsets.all(5.0),
-      color: machine.isSelected ? Theme.of(context).primaryColorDark : Theme.of(context).primaryColorLight,
+      width: MediaQuery.of(context).size.width * 0.3,
       child: RaisedButton(
+          color: machine.isSelected ? Theme.of(context).primaryColor : Theme.of(context).primaryColorLight,
           child: Column(
             children: <Widget>[
               machine.isSelected
                   ? Image.asset("assets/images/machine_selected.jpeg")
                   : Image.asset("assets/images/machine_not_selected.jpeg"),
-              Text(machine.id),
+              Text(machine.id, style: TextStyle(fontSize: 24, fontFamily: "Arial"),),
             ],
           ),
           onPressed: () {

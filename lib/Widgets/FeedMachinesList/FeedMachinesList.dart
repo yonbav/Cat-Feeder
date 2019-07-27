@@ -12,8 +12,11 @@ class FeedMachineList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(25.0),
       child: GridView.count(
         crossAxisCount: 2,
+        crossAxisSpacing: 12.0,
+        mainAxisSpacing: 12.0,
         children: machines
             .map((element) => Card(
                 child: new FeedMachineSelector(
