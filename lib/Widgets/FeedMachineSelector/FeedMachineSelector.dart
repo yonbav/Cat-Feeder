@@ -29,7 +29,7 @@ class FeedMachineSelector extends StatelessWidget {
           Text(machine.id),
         ],
       ), 
-      onPressed: () {changeSelected(machine)})),
-    );
+      onPressed: () {changeSelected(machine);})
+      ,);
   }
 }
