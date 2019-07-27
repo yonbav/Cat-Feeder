@@ -2,43 +2,34 @@ import 'package:flutter/material.dart';
 import '../../Globals.dart';
 import '../../Utils/EnumsUtil.dart';
 
-class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   // members
   final String title;
+  final eChoices selectedChoice;
 
   // properties
   @override
   final Size preferredSize = Size.fromHeight(56.0);
 
   // constructor
-  MyAppBar({Key key, this.title}) : super(key: key);
-
-  // CreateState
-  @override
-  _MyAppBarState createState() => new _MyAppBarState();
-}
-
-class _MyAppBarState extends State<MyAppBar> {
-  // members
-  static eChoices _selectedChoice = eChoices.Home;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  MyAppBar({Key key, this.title, this.selectedChoice}) : super(key: key);
 
   // build
   @override
   Widget build(BuildContext context) {
-    return new AppBar(title: new Text(widget.title), actions: <Widget>[
+    return new AppBar(title: new Text(title), actions: <Widget>[
       PopupMenuButton<eChoices>(
-          onSelected: _choiceAction, itemBuilder: buildDropdownItems)
+        onSelected: (choice) {
+          _choiceAction(choice, context);
+        },
+        itemBuilder: buildDropdownItems,
+      )
     ]);
   }
 
   List<PopupMenuItem<eChoices>> buildDropdownItems(BuildContext context) {
     return eChoices.values
-        .where((choice) => choice != _selectedChoice)
+        .where((choice) => choice != selectedChoice)
         .map((eChoices choice) {
       return PopupMenuItem<eChoices>(
         value: choice,
@@ -48,40 +39,37 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   // Private Methods
-  void _choiceAction(eChoices choice) {
-    setState(() {
-      _selectedChoice = choice;
-    });
-
+  
+  void _choiceAction(eChoices choice, BuildContext context) {
     switch (choice) {
       case eChoices.Home:
-        _homePressed();
+        _homePressed(context);
         break;
       case eChoices.AddFeed:
-        _addFeedPressed();
+        _addFeedPressed(context);
         break;
       case eChoices.ManageFeed:
-        _manageFeedsPressed();
+        _manageFeedsPressed(context);
         break;
       case eChoices.ScheduleFeed:
-        _scheduleFeedPressed();
+        _scheduleFeedPressed(context);
         break;
     }
   }
 
-  void _homePressed() {
+  void _homePressed(BuildContext context) {
     Navigator.pushNamed(context, "/");
   }
 
-  void _manageFeedsPressed() {
+  void _manageFeedsPressed(BuildContext context) {
     Navigator.pushNamed(context, "/ManageFeeds");
   }
 
-  void _addFeedPressed() {
+  void _addFeedPressed(BuildContext context) {
     Navigator.pushNamed(context, "/AddFeed");
   }
 
-  void _scheduleFeedPressed() {
+  void _scheduleFeedPressed(BuildContext context) {
     Navigator.pushNamed(context, "/ScheduleFeed");
   }
 }

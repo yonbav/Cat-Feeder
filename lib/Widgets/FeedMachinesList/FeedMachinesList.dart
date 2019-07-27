@@ -6,19 +6,20 @@ class FeedMachineList extends StatelessWidget {
   final List<Machine> machines;
   final Function changeSelected;
 
-  const FeedMachineList({Key key, this.machines, this.changeSelected}) : super(key: key);
+  const FeedMachineList({Key key, this.machines, this.changeSelected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: 
-        Column(
-          children: machines
-              .map((element) => Card(
-                    child: new FeedMachineSelector(machine: element, changeSelected: changeSelected)
-                  ))
-              .toList(),
-        ),
+      child: GridView.count(
+        crossAxisCount: 2,
+        children: machines
+            .map((element) => Card(
+                child: new FeedMachineSelector(
+                    machine: element, changeSelected: changeSelected)))
+            .toList(),
+      ),
     );
   }
 }

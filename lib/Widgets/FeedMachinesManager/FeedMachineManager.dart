@@ -10,7 +10,9 @@ class FeedMachineManager extends StatefulWidget {
 
 class _FeedMachineManagerState extends State<FeedMachineManager> {
   // Members
-  List<Machine> _machines = [new Machine("111")];
+  List<Machine> _machines = [new Machine("111"), new Machine("222"),
+  new Machine("333"), new Machine("444"),new Machine("555"), new Machine("666"),
+  new Machine("333"), new Machine("444"),new Machine("555"), new Machine("666")];
 
   // build
   @override
