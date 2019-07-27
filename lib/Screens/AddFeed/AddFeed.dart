@@ -8,7 +8,7 @@ class AddFeed extends StatelessWidget {
     return new Scaffold(
         appBar: new MyAppBar(
           title: "Add Feed",
-          selectedChoice: eChoices.ManageFeed,
+          selectedChoice: eChoices.AddFeed,
         ),
         body: new Center(
           child: new Text("AddFeed"),

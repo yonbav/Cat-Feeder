@@ -8,7 +8,7 @@ class ScheduleFeed extends StatelessWidget {
     return new Scaffold(
       appBar: new MyAppBar(
         title: "Schedule Feed",
-        selectedChoice: eChoices.ManageFeed,
+        selectedChoice: eChoices.ScheduleFeed,
       ),
       body: new Center(
         child: new Text("Schedule Feed"),
