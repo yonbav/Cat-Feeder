@@ -2,37 +2,56 @@ import 'package:flutter/material.dart';
 import '../../Globals.dart';
 import '../../Utils/EnumsUtil.dart';
 
-class MyAppBarState extends State<MyAppBar> {
-
+class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   // members
-  final String _title;
-  eChoices selectedChoice;
+  final String title;
 
+  // properties
+  @override
+  final Size preferredSize = Size.fromHeight(56.0);
 
   // constructor
-  MyAppBarState(String title) : _title = title;
+  MyAppBar({Key key, this.title}) : super(key: key);
+
+  // CreateState
+  @override
+  _MyAppBarState createState() => new _MyAppBarState();
+}
+
+class _MyAppBarState extends State<MyAppBar> {
+  // members
+  static eChoices _selectedChoice = eChoices.Home;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   // build
   @override
   Widget build(BuildContext context) {
-    return new AppBar(title: new Text(_title), actions: <Widget>[
+    return new AppBar(title: new Text(widget.title), actions: <Widget>[
       PopupMenuButton<eChoices>(
-        onSelected: _choiceAction,
-        itemBuilder: (BuildContext context) {
-          return eChoices.values.where((choice) => choice != selectedChoice).map((eChoices choice) {
-            return PopupMenuItem<eChoices>(
-              value: choice,
-              child: new Text(EnumsUtil.convertChoiceToStirng(choice)),
-            );
-          }).toList();
-        },
-      ),
+          onSelected: _choiceAction, itemBuilder: buildDropdownItems)
     ]);
+  }
+
+  List<PopupMenuItem<eChoices>> buildDropdownItems(BuildContext context) {
+    return eChoices.values
+        .where((choice) => choice != _selectedChoice)
+        .map((eChoices choice) {
+      return PopupMenuItem<eChoices>(
+        value: choice,
+        child: new Text(EnumsUtil.convertChoiceToStirng(choice)),
+      );
+    }).toList();
   }
 
   // Private Methods
   void _choiceAction(eChoices choice) {
-    selectedChoice = choice;
+    setState(() {
+      _selectedChoice = choice;
+    });
 
     switch (choice) {
       case eChoices.Home:
@@ -65,21 +84,4 @@ class MyAppBarState extends State<MyAppBar> {
   void _scheduleFeedPressed() {
     Navigator.pushNamed(context, "/ScheduleFeed");
   }
-}
-
-class MyAppBar extends StatefulWidget implements PreferredSizeWidget{
-  
-  // members
-  final String _title;
-
-  // properties
-  @override
-  final Size preferredSize;
-
-  // constructor
-  MyAppBar({Key key, String title}) : preferredSize = Size.fromHeight(56.0), _title = title, super(key: key);
-
-  // CreateState
-  @override
-  MyAppBarState createState() => new MyAppBarState(_title);
 }
