@@ -1,5 +1,5 @@
 import 'package:cat_feeder/Data/Machine/Machine.dart';
-import 'package:cat_feeder/Widgets/FeedMachineSelector/index.dart';
+import '../FeedMachineSelector/index.dart';
 import 'package:flutter/material.dart';
 
 class FeedMachineList extends StatelessWidget {

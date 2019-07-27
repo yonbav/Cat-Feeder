@@ -1,5 +1,5 @@
 import 'package:cat_feeder/Globals.dart';
-import 'package:cat_feeder/Widgets/FeedMachinesManager/index.dart';
+import './Widgets/FeedMachinesManager/index.dart';
 import 'package:cat_feeder/Widgets/MyAppBar/index.dart';
 import 'package:flutter/material.dart';
 
