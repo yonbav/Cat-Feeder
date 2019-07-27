@@ -1,4 +1,7 @@
+import 'package:cat_feeder/Data/Feed/Feed.dart';
 import 'package:cat_feeder/Data/Machine/Machine.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../../../Globals.dart';
 import '../FeedMachinesList/index.dart';
 import 'package:flutter/material.dart';
 
@@ -10,18 +13,7 @@ class FeedMachineManager extends StatefulWidget {
 
 class _FeedMachineManagerState extends State<FeedMachineManager> {
   // Members
-  List<Machine> _machines = [
-    new Machine("111"),
-    new Machine("222"),
-    new Machine("333"),
-    new Machine("444"),
-    new Machine("555"),
-    new Machine("666"),
-    new Machine("777"),
-    new Machine("888"),
-    new Machine("999"),
-    new Machine("1212"),
-  ];
+  List<Machine> _machines = machinesFromServer;
 
   // build
   @override
@@ -60,6 +52,15 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
   }
 
   void _setFeedingForSelectedDevices() {
-    print("Feeding now");
+    // Getting the devices that are selected
+    var devicesToCreateFeed = _machines.where((element) => element.isSelected);
+
+    // Converting each device into a feed
+    var feedsToSave = devicesToCreateFeed.map((element) => new Feed.fromDevice(element.id));
+
+    var alertMessage = "Feeding now devices: " + feedsToSave.map((element) => element.deviceId).join(", ");
+
+    // Printing the feed
+    Alert(context: context, title: "Feed Now", desc: alertMessage).show();
   }
 }

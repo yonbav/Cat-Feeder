@@ -1,6 +1,8 @@
 import 'package:cat_feeder/Data/Machine/Machine.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../Globals.dart';
+
 class FeedMachineSelector extends StatelessWidget {
   // members
   final Machine machine;
@@ -22,7 +24,7 @@ class FeedMachineSelector extends StatelessWidget {
               machine.isSelected
                   ? Image.asset("assets/images/machine_selected.jpeg")
                   : Image.asset("assets/images/machine_not_selected.jpeg"),
-              Text(machine.id, style: TextStyle(fontSize: 24, fontFamily: "Arial"),),
+              Text(machine.id, style: TextStyle(fontSize: 24, fontFamily: appFontFamily),),
             ],
           ),
           onPressed: () {

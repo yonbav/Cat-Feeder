@@ -51,8 +51,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       case eChoices.ManageFeed:
         _manageFeedsPressed(context);
         break;
-      case eChoices.ScheduleFeed:
-        _scheduleFeedPressed(context);
         break;
     }
   }
@@ -67,9 +65,5 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   void _addFeedPressed(BuildContext context) {
     Navigator.pushNamed(context, "/AddFeed");
-  }
-
-  void _scheduleFeedPressed(BuildContext context) {
-    Navigator.pushNamed(context, "/ScheduleFeed");
   }
 }

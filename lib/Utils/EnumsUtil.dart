@@ -11,8 +11,6 @@ class EnumsUtil
         return "Add Feed";
       case eChoices.ManageFeed:
         return "Manage Feed";
-      case eChoices.ScheduleFeed:
-        return "Schedule Feed";
     }
 
     return "unknown";

@@ -1,3 +1,4 @@
+import 'package:cat_feeder/Screens/AddFeed/Widgets/AddFeedForm/index.dart';
 import 'package:cat_feeder/Widgets/MyAppBar/index.dart';
 import 'package:flutter/material.dart';
 import 'package:cat_feeder/Globals.dart';
@@ -10,8 +11,6 @@ class AddFeed extends StatelessWidget {
           title: "Add Feed",
           selectedChoice: eChoices.AddFeed,
         ),
-        body: new Center(
-          child: new Text("AddFeed"),
-        ));
+        body: AddFeedForm());
   }
 }
