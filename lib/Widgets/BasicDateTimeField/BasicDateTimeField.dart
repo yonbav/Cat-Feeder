@@ -9,20 +9,24 @@ class BasicDateTimeField extends StatelessWidget {
   final format = DateFormat("yyyy-MM-dd HH:mm");
   final Function onDateTimeChanged;
   final DateTime defaultValue;
+  final bool enabled;
+  final double width;
 
   // Constructor
-  BasicDateTimeField({Key key, this.onDateTimeChanged, this.defaultValue}) : super(key: key);
+  BasicDateTimeField({Key key, this.onDateTimeChanged, this.defaultValue, this.enabled=true, this.width = 0.0}) : super(key: key);
 
   // build
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width == 0 ? MediaQuery.of(context).size.width: width,
       child: Column(children: <Widget>[
         DateTimeField(
+          enabled: enabled,
           initialValue: defaultValue,
           format: format,
           style: TextStyle(
-              fontSize: 18,
+              fontSize: 12,
               fontWeight: FontWeight.w300,
               fontFamily: appFontFamily),
           textAlign: TextAlign.center,

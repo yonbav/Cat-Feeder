@@ -1,5 +1,6 @@
 import 'package:cat_feeder/Data/Feed/Feed.dart';
 import 'package:cat_feeder/Data/Machine/Machine.dart';
+import 'package:cat_feeder/Widgets/AlignedFormField/index.dart';
 import 'package:cat_feeder/Widgets/BasicDateTimeField/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,12 @@ class AddFeedForm extends StatefulWidget {
 
 class _AddFeedFormState extends State<AddFeedForm> {
   // Final Members
-  final _formKey = GlobalKey<FormState>();
+  final _formKey               = GlobalKey<FormState>();
   final List<Machine> _devices = machinesFromServer;
+  final int paddingSpaces      = 30;
+  final String feedingTime     = "Feeding Time: ";
+  final String deviceId        = "Device Id: ";
+  final String isScheduled     = "Is Scheduled: ";
 
   // Members
   Feed _feed;
@@ -31,22 +36,38 @@ class _AddFeedFormState extends State<AddFeedForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(50.0),
+      margin: EdgeInsets.all(25.0),
       child: Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
-            BasicDateTimeField(
-              onDateTimeChanged: _setSelectedDateTime,
-              defaultValue: _feed.feedingTime,
+            AlignedForField(
+              fieldName: feedingTime.padRight(paddingSpaces - feedingTime.length),
+              fieldWidget: BasicDateTimeField(
+                width: MediaQuery.of(context).size.width * 0.5,
+                onDateTimeChanged: _setSelectedDateTime,
+                defaultValue: _feed.feedingTime,
+                enabled: !_feed.isScheduled,
+              ),
             ),
-            Padding(padding: EdgeInsets.only(top: 55.0),),
-            DropdownButton(
-              value: _feed.deviceId,
-              items: _getAvailableDevices(),
-              onChanged: _setSelectedDevice,
+            AlignedForField(
+              fieldName: deviceId.padRight(paddingSpaces - deviceId.length),
+              fieldWidget: DropdownButton(
+                value: _feed.deviceId,
+                items: _getAvailableDevices(),
+                onChanged: _setSelectedDevice,
+              ),
             ),
-            Padding(padding: EdgeInsets.only(top: 55.0),),
+            AlignedForField(
+              fieldName: isScheduled.padRight(paddingSpaces - isScheduled.length),
+              fieldWidget: Switch(
+                onChanged: _setIsScheduled,
+                value: _feed.isScheduled,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 55.0),
+            ),
             RaisedButton(
               child: Text("Feed"),
               onPressed: _saveFeed,
@@ -67,6 +88,12 @@ class _AddFeedFormState extends State<AddFeedForm> {
   void _setSelectedDevice(value) {
     setState(() {
       _feed.deviceId = value;
+    });
+  }
+
+  void _setIsScheduled(value) {
+    setState(() {
+      _feed.isScheduled = value;
     });
   }
 

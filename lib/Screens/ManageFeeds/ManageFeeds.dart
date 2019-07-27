@@ -2,6 +2,8 @@ import 'package:cat_feeder/Widgets/MyAppBar/index.dart';
 import 'package:cat_feeder/Globals.dart';
 import 'package:flutter/material.dart';
 
+import 'Widgets/FeedsListManager/index.dart';
+
 class ManageFeeds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -10,9 +12,7 @@ class ManageFeeds extends StatelessWidget {
         title: "Manage Feed",
         selectedChoice: eChoices.ManageFeed,
       ),
-      body: new Center(
-        child: new Text("Manage Feed"),
-      ),
+      body: FeedListManager(),
     );
   }
 }

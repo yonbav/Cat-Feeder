@@ -1,3 +1,5 @@
+import 'package:cat_feeder/Data/Feed/Feed.dart';
+
 import 'Data/Machine/Machine.dart';
 
 enum eChoices {
@@ -19,4 +21,17 @@ List<Machine> machinesFromServer = [
     new Machine("888"),
     new Machine("999"),
     new Machine("1212"),
+  ];
+
+
+List<Feed> feedsFromServer = [
+    new Feed(deviceId: "111",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "111",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "222",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "222",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "111",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "333",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "111",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "333",feedingTime: DateTime.now(), isScheduled: false),
+    new Feed(deviceId: "222",feedingTime: DateTime.now(), isScheduled: false),
   ];
