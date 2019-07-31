@@ -47,7 +47,6 @@ class _AddFeedFormState extends State<AddFeedForm> {
                 width: MediaQuery.of(context).size.width * 0.5,
                 onDateTimeChanged: _setSelectedDateTime,
                 defaultValue: _feed.feedingTime,
-                enabled: !_feed.isScheduled,
               ),
             ),
             AlignedForField(

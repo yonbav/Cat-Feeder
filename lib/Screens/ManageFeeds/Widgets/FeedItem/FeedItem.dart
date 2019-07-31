@@ -24,17 +24,29 @@ class FeedItem extends StatelessWidget {
           child: Image.asset("assets/images/machine_selected.jpeg"),
           width: MediaQuery.of(context).size.width * 0.1,
         ),
-        Column(children: <Widget>[
-          Text(feed.deviceId),
+        Padding(
+          padding:
+              EdgeInsets.only(top: 0.0, bottom: 0.0, left: 10.0, right: 10.0),
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Text(
+            feed.deviceId,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Padding(
+            padding:
+                EdgeInsets.only(top: 5.0, bottom: 5.0, left: 0.0, right: 0.0),
+          ),
           Text(new DateFormat("dd/MM/yyyy hh:mm:ss").format(feed.feedingTime)),
         ]),
-        RaisedButton(
-          color: Theme.of(context).primaryColorLight,
+        Padding(
+          padding:
+              EdgeInsets.only(top: 0.0, bottom: 0.0, left: 5.0, right: 5.0),
+        ),
+        IconButton(
+          color: Theme.of(context).primaryColorDark,
           onPressed: () => deleteFeed(feed.id),
-          child: Container(
-            child: Image.asset("assets/images/delete.png"),
-            width: MediaQuery.of(context).size.width * 0.05,
-          ),
+          icon: Icon(Icons.delete_forever),
         ),
       ]),
     );

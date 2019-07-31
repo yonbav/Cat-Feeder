@@ -9,7 +9,7 @@ class ManageFeeds extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new MyAppBar(
-        title: "Manage Feed",
+        title: "Manage Feeds",
         selectedChoice: eChoices.ManageFeed,
       ),
       body: FeedListManager(),

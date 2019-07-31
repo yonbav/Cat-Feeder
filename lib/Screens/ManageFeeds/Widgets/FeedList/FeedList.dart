@@ -5,9 +5,10 @@ import '../FeedItem/index.dart';
 class FeedList extends StatelessWidget {
   // Members
   final List<Feed> feeds;
+  final Function deleteFeed;
 
   // Constructor
-  const FeedList({Key key, this.feeds}) : super(key: key);
+  const FeedList({Key key, this.feeds, this.deleteFeed}) : super(key: key);
 
   // build
   @override
@@ -18,7 +19,7 @@ class FeedList extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         itemCount: feeds.length,
         itemBuilder: (BuildContext context, int index) {
-          return FeedItem(feed: feeds[index],);
+          return FeedItem(feed: feeds[index], deleteFeed: deleteFeed,);
         },
       ),
     );

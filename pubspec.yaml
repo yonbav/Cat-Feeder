@@ -45,7 +45,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/delete.png
     - assets/images/machine_not_selected.jpeg
     - assets/images/machine_selected.jpeg
 
