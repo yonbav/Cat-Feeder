@@ -45,7 +45,7 @@ class FeedItem extends StatelessWidget {
         ),
         IconButton(
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => deleteFeed(feed.id),
+          onPressed: () => deleteFeed(feed),
           icon: Icon(Icons.delete_forever),
         ),
       ]),

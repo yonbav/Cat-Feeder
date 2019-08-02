@@ -13,7 +13,6 @@ String feedToDeleteJson(String id) {
     "Id" : id,
   },
   "TableName": "Feeds",
-  "ReturnValues": "ALL_OLD",
 };
   return json.encode(dyn);
 }
@@ -61,9 +60,9 @@ class FeedModel {
 
   factory FeedModel.fromJson(Map<String, dynamic> json) => new FeedModel.createFull(
     id: json["Id"],
-    isScheduled: json["IsScheduled"],
-    createdTime: json["CreatedTime"],
-    feedingTime: json["FeedingTime"],
+    isScheduled: json["IsScheduled"].toString().toLowerCase() == "true",
+    createdTime: DateTime.parse(json["CreatedTime"]),
+    feedingTime: DateTime.parse(json["FeedingTime"]),
     deviceId: json["DeviceId"],
   );
 }
