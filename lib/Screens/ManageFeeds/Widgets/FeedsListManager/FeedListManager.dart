@@ -1,4 +1,4 @@
-import 'package:cat_feeder/Data/Feed/Feed.dart';
+import 'package:cat_feeder/Data/FeedModel/FeedModel.dart';
 import 'package:cat_feeder/Globals.dart';
 import 'package:cat_feeder/Screens/ManageFeeds/Widgets/FeedList/index.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class FeedListManager extends StatefulWidget {
 class _FeedListManagerState extends State<FeedListManager> {
 
   // Members 
-  List<Feed> _feeds = feedsFromServer;
+  List<FeedModel> _feeds = feedsFromServer;
 
   // build
   @override

@@ -1,10 +1,10 @@
-import 'package:cat_feeder/Data/Feed/Feed.dart';
+import 'package:cat_feeder/Data/FeedModel/FeedModel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class FeedItem extends StatelessWidget {
   // Members
-  final Feed feed;
+  final FeedModel feed;
   final Function deleteFeed;
 
   // Constructor

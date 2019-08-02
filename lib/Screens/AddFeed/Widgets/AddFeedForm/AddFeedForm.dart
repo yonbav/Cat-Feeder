@@ -1,5 +1,5 @@
-import 'package:cat_feeder/Data/Feed/Feed.dart';
-import 'package:cat_feeder/Data/Machine/Machine.dart';
+import 'package:cat_feeder/Data/FeedModel/FeedModel.dart';
+import 'package:cat_feeder/Data/MachineModel/MachineModel.dart';
 import 'package:cat_feeder/Widgets/AlignedFormField/index.dart';
 import 'package:cat_feeder/Widgets/BasicDateTimeField/index.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,18 +18,18 @@ class AddFeedForm extends StatefulWidget {
 class _AddFeedFormState extends State<AddFeedForm> {
   // Final Members
   final _formKey               = GlobalKey<FormState>();
-  final List<Machine> _devices = machinesFromServer;
+  final List<MachineModel> _devices = machinesFromServer;
   final int paddingSpaces      = 30;
   final String feedingTime     = "Feeding Time: ";
   final String deviceId        = "Device Id: ";
   final String isScheduled     = "Is Scheduled: ";
 
   // Members
-  Feed _feed;
+  FeedModel _feed;
 
   @override
   void initState() {
-    _feed = Feed.fromDevice(_devices.first.id);
+    _feed = FeedModel.fromDevice(_devices.first.id);
     super.initState();
   }
 

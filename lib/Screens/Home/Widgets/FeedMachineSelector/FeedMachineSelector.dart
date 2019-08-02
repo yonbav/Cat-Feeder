@@ -1,11 +1,11 @@
-import 'package:cat_feeder/Data/Machine/Machine.dart';
+import 'package:cat_feeder/Data/MachineModel/MachineModel.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../Globals.dart';
 
 class FeedMachineSelector extends StatelessWidget {
   // members
-  final Machine machine;
+  final MachineModel machine;
   final Function changeSelected;
 
   // constructor

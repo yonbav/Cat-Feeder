@@ -1,49 +1,60 @@
-import 'package:cat_feeder/Data/Feed/Feed.dart';
-import 'package:cat_feeder/Data/Machine/Machine.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import '../../../../Globals.dart';
+import 'package:cat_feeder/Data/BusyIndicator/BusyIndicator.dart';
+import 'package:cat_feeder/Data/MachineListModel/MachineListModel.dart';
+import 'package:cat_feeder/Data/FeedListModel/FeedListModel.dart';
+import 'package:cat_feeder/Data/FeedModel/FeedModel.dart';
+import 'package:cat_feeder/Data/MachineModel/MachineModel.dart';
+import 'package:provider/provider.dart';
 import '../FeedMachinesList/index.dart';
 import 'package:flutter/material.dart';
 
 class FeedMachineManager extends StatefulWidget {
+  
+  // Constructor
   FeedMachineManager({Key key}) : super(key: key);
 
+  // Create State
   _FeedMachineManagerState createState() => _FeedMachineManagerState();
 }
 
 class _FeedMachineManagerState extends State<FeedMachineManager> {
   // Members
-  List<Machine> _machines = machinesFromServer;
+  List<MachineModel> _machines = [];
 
   // build
   @override
   Widget build(BuildContext context) {
+    final machinesProvider = Provider.of<MachineListModel>(context);
+    _machines = machinesProvider.machines;
+
     return Container(
-        child: Column(children: <Widget>[
-      Flexible(
-        flex: 10,
-        child: FeedMachineList(
-          machines: _machines,
-          changeSelected: _changeMachineSelected,
-        ),
-      ),
-      Flexible(
-        flex: 2,
-        child: Container(
-          margin: EdgeInsets.only(top: 15.0),
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: RaisedButton(
-            color: Theme.of(context).primaryColorLight,
-            child: Text("Feed Now"),
-            onPressed: _setFeedingForSelectedDevices,
+      child: Column(
+        children: <Widget>[
+          Flexible(
+            flex: 10,
+            child: FeedMachineList(
+              machines: _machines,
+              changeSelected: _changeMachineSelected,
+            ),
           ),
-        ),
+          Flexible(
+            flex: 2,
+            child: Container(
+              margin: EdgeInsets.only(top: 15.0),
+              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: RaisedButton(
+                color: Theme.of(context).primaryColorLight,
+                child: Text("Feed Now"),
+                onPressed: _setFeedingForSelectedDevices,
+              ),
+            ),
+          ),
+        ],
       ),
-    ]));
+    );
   }
 
   // private methods
-  void _changeMachineSelected(Machine machine) {
+  void _changeMachineSelected(MachineModel machine) {
     setState(() {
       var selectedMachine =
           _machines.firstWhere((element) => element.id == machine.id);
@@ -51,16 +62,27 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
     });
   }
 
-  void _setFeedingForSelectedDevices() {
+  Future _setFeedingForSelectedDevices() async {
+    // Getting the needed providers
+    final feedsProvider = Provider.of<FeedListModel>(context, listen: false);
+    final busyIndicatorProvider = Provider.of<BusyIndicator>(context, listen: false);
+
     // Getting the devices that are selected
     var devicesToCreateFeed = _machines.where((element) => element.isSelected);
 
     // Converting each device into a feed
-    var feedsToSave = devicesToCreateFeed.map((element) => new Feed.fromDevice(element.id));
+    var feedsToSave = devicesToCreateFeed
+        .map((element) => new FeedModel.fromDevice(element.id));
 
-    var alertMessage = "Feeding now devices: " + feedsToSave.map((element) => element.deviceId).join(", ");
+    //Show busy indicator
+    busyIndicatorProvider.setIsBusy(true);
 
-    // Printing the feed
-    Alert(context: context, title: "Feed Now", desc: alertMessage).show();
+    // Adding the feeds
+    for (var i = 0; i < feedsToSave.length; i++) {
+      await feedsProvider.add(feedsToSave.elementAt(i), context);
+    }
+
+    //Stopping busy indicator
+    busyIndicatorProvider.setIsBusy(false);
   }
 }

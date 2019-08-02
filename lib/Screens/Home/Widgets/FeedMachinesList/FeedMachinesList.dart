@@ -1,9 +1,9 @@
-import 'package:cat_feeder/Data/Machine/Machine.dart';
+import 'package:cat_feeder/Data/MachineModel/MachineModel.dart';
 import '../FeedMachineSelector/index.dart';
 import 'package:flutter/material.dart';
 
 class FeedMachineList extends StatelessWidget {
-  final List<Machine> machines;
+  final List<MachineModel> machines;
   final Function changeSelected;
 
   const FeedMachineList({Key key, this.machines, this.changeSelected})
