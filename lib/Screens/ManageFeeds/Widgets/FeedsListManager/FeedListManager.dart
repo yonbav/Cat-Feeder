@@ -2,6 +2,7 @@ import 'package:cat_feeder/Data/BusyIndicator/BusyIndicator.dart';
 import 'package:cat_feeder/Data/FeedListModel/FeedListModel.dart';
 import 'package:cat_feeder/Data/FeedModel/FeedModel.dart';
 import 'package:cat_feeder/Screens/ManageFeeds/Widgets/FeedList/index.dart';
+import 'package:cat_feeder/Widgets/CircularLoading/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,13 +16,24 @@ class _FeedListManagerState extends State<FeedListManager> {
   // Members
   List<FeedModel> _feeds = [];
 
+  // init state
+ @override
+  void initState() {
+    final busyIndicatorProvider = Provider.of<BusyIndicator>(context, listen: false);
+    final feedsProvider = Provider.of<FeedListModel>(context, listen: false);
+
+    busyIndicatorProvider.setIsBusy(true);
+    feedsProvider.reloadAllFromServer()
+        .then((_) => busyIndicatorProvider.setIsBusy(false));
+    super.initState();
+  }
   // build
   @override
   Widget build(BuildContext context) {
     return Consumer<BusyIndicator>(
       builder: (BuildContext context, BusyIndicator value, Widget child) {
         return value.isBusy
-            ? CircularProgressIndicator()
+            ? CircularLoading()
             : Consumer<FeedListModel>(
                 builder: (BuildContext context, FeedListModel feedsProvider,
                     Widget child) {

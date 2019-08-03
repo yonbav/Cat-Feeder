@@ -5,6 +5,7 @@ import 'package:cat_feeder/Data/MachineListModel/MachineListModel.dart';
 import 'package:cat_feeder/Data/MachineModel/MachineModel.dart';
 import 'package:cat_feeder/Widgets/AlignedFormField/index.dart';
 import 'package:cat_feeder/Widgets/BasicDateTimeField/index.dart';
+import 'package:cat_feeder/Widgets/CircularLoading/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,12 +26,12 @@ class _AddFeedFormState extends State<AddFeedForm> {
   final String deviceId = "Device Id: ";
   final String isScheduled = "Is Scheduled: ";
 
-  // Members4
+  // Members
   FeedModel _feed;
 
+  // init state
   @override
   void initState() {
-
     final busyIndicatorProvider =
         Provider.of<BusyIndicator>(context, listen: false);
 
@@ -39,13 +40,12 @@ class _AddFeedFormState extends State<AddFeedForm> {
 
     _feed = FeedModel.fromDevice("000");
 
-    busyIndicatorProvider.setIsBusy(true);    
+    busyIndicatorProvider.setIsBusy(true);
     machinesProvider.reloadAllFromServer().then((_) {
       busyIndicatorProvider.setIsBusy(false);
       _devices.addAll(machinesProvider.machines);
 
-      if (_devices.length != 0)
-        _feed = FeedModel.fromDevice(_devices.first.id);
+      if (_devices.length != 0) _feed = FeedModel.fromDevice(_devices.first.id);
 
       super.initState();
     });
@@ -56,7 +56,7 @@ class _AddFeedFormState extends State<AddFeedForm> {
     return Consumer<BusyIndicator>(
       builder: (BuildContext context, BusyIndicator value, Widget child) {
         return value.isBusy
-            ? CircularProgressIndicator()
+            ? CircularLoading()
             : Container(
                 margin: EdgeInsets.all(25.0),
                 child: Form(

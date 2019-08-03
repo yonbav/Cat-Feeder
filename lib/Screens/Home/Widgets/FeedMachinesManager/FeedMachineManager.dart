@@ -3,6 +3,7 @@ import 'package:cat_feeder/Data/MachineListModel/MachineListModel.dart';
 import 'package:cat_feeder/Data/FeedListModel/FeedListModel.dart';
 import 'package:cat_feeder/Data/FeedModel/FeedModel.dart';
 import 'package:cat_feeder/Data/MachineModel/MachineModel.dart';
+import 'package:cat_feeder/Widgets/CircularLoading/index.dart';
 import 'package:provider/provider.dart';
 import '../FeedMachinesList/index.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,20 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
   // Members
   List<MachineModel> _machines = [];
 
+  // init state
+  @override
+  void initState() {
+    final busyIndicatorProvider =
+        Provider.of<BusyIndicator>(context, listen: false);
+    final machinesProvider =
+        Provider.of<MachineListModel>(context, listen: false);
+
+    busyIndicatorProvider.setIsBusy(true);
+    machinesProvider.reloadAllFromServer()
+        .then((_) => busyIndicatorProvider.setIsBusy(false));
+    super.initState();
+  }
+
   // build
   @override
   Widget build(BuildContext context) {
@@ -29,7 +44,7 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
     return  Consumer<BusyIndicator>(
         builder: (BuildContext context, BusyIndicator value, Widget child) {
           return value.isBusy
-              ? CircularProgressIndicator()
+              ? CircularLoading()
               : Container(
       child: Column(
         children: <Widget>[

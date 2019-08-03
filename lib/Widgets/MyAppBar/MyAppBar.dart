@@ -1,4 +1,6 @@
+import 'package:cat_feeder/Data/BusyIndicator/BusyIndicator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../Globals.dart';
 import '../../Utils/EnumsUtil.dart';
 
@@ -17,14 +19,21 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   // build
   @override
   Widget build(BuildContext context) {
-    return new AppBar(title: new Text(title), actions: <Widget>[
-      PopupMenuButton<eChoices>(
-        onSelected: (choice) {
-          _choiceAction(choice, context);
-        },
-        itemBuilder: buildDropdownItems,
-      )
-    ]);
+    var isBusyProvider = Provider.of<BusyIndicator>(context);
+
+    return isBusyProvider.isBusy ?    
+    Text("") :
+    AppBar(
+        title: new Text(title),
+        actions: <Widget>[
+          PopupMenuButton<eChoices>(
+            onSelected: (choice) {
+              _choiceAction(choice, context);
+            },
+            itemBuilder: buildDropdownItems,
+          )
+        ],
+    );
   }
 
   List<PopupMenuItem<eChoices>> buildDropdownItems(BuildContext context) {
@@ -39,7 +48,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   // Private Methods
-  
+
   void _choiceAction(eChoices choice, BuildContext context) {
     switch (choice) {
       case eChoices.Home:
