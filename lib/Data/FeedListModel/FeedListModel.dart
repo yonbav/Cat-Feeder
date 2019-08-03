@@ -9,7 +9,7 @@ class FeedListModel extends ChangeNotifier {
     
   List<FeedModel> get feeds => List.unmodifiable(_feeds);
 
-  void reloadAllFromServer() async {
+  Future reloadAllFromServer() async {
     var allFeeds = await getAllFeeds();
     _feeds.clear();
     _feeds.addAll(allFeeds);

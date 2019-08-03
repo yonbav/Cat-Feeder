@@ -18,16 +18,22 @@ class _FeedListManagerState extends State<FeedListManager> {
   // build
   @override
   Widget build(BuildContext context) {
-    return Consumer<FeedListModel>(
-      builder:
-          (BuildContext context, FeedListModel feedsProvider, Widget child) {
-        _feeds = feedsProvider.feeds;
-        return Container(
-          child: FeedList(
-            feeds: _feeds,
-            deleteFeed: _deleteFeed,
-          ),
-        );
+    return Consumer<BusyIndicator>(
+      builder: (BuildContext context, BusyIndicator value, Widget child) {
+        return value.isBusy
+            ? CircularProgressIndicator()
+            : Consumer<FeedListModel>(
+                builder: (BuildContext context, FeedListModel feedsProvider,
+                    Widget child) {
+                  _feeds = feedsProvider.feeds;
+                  return Container(
+                    child: FeedList(
+                      feeds: _feeds,
+                      deleteFeed: _deleteFeed,
+                    ),
+                  );
+                },
+              );
       },
     );
   }
@@ -36,7 +42,8 @@ class _FeedListManagerState extends State<FeedListManager> {
   Future _deleteFeed(FeedModel feed) async {
     // Getting the needed providers
     final feedsProvider = Provider.of<FeedListModel>(context, listen: false);
-    final busyIndicatorProvider = Provider.of<BusyIndicator>(context, listen: false);
+    final busyIndicatorProvider =
+        Provider.of<BusyIndicator>(context, listen: false);
 
     //Show busy indicator
     busyIndicatorProvider.setIsBusy(true);

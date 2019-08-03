@@ -26,7 +26,11 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
     final machinesProvider = Provider.of<MachineListModel>(context);
     _machines = machinesProvider.machines;
 
-    return Container(
+    return  Consumer<BusyIndicator>(
+        builder: (BuildContext context, BusyIndicator value, Widget child) {
+          return value.isBusy
+              ? CircularProgressIndicator()
+              : Container(
       child: Column(
         children: <Widget>[
           Flexible(
@@ -51,6 +55,8 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
         ],
       ),
     );
+        },
+      );
   }
 
   // private methods

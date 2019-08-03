@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final busyIndicatorProvider = Provider.of<BusyIndicator>(context, listen: false);
-    final machinesProvider = Provider.of<MachineListModel>(context, listen: false);
+    final busyIndicatorProvider =
+        Provider.of<BusyIndicator>(context, listen: false);
+    final machinesProvider =
+        Provider.of<MachineListModel>(context, listen: false);
 
     busyIndicatorProvider.setIsBusy(true);
-    machinesProvider.reloadAllFromServer();
-    busyIndicatorProvider.setIsBusy(false);
+    machinesProvider.reloadAllFromServer()
+        .then((_) => busyIndicatorProvider.setIsBusy(false));
 
     return Scaffold(
       appBar: MyAppBar(

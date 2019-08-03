@@ -7,10 +7,11 @@ class AddFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new MyAppBar(
-          title: "Add Feed",
-          selectedChoice: eChoices.AddFeed,
-        ),
-        body: AddFeedForm());
+      appBar: new MyAppBar(
+        title: "Add Feed",
+        selectedChoice: eChoices.AddFeed,
+      ),
+      body: AddFeedForm(),
+    );
   }
 }

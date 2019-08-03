@@ -7,5 +7,6 @@ class BusyIndicator extends ChangeNotifier {
 
   void setIsBusy(bool value) {
     _isBusy = value;
+    notifyListeners();
   }
 }

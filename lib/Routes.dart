@@ -26,6 +26,7 @@ class Routes {
     ),
     '/AddFeed': (BuildContext context) => MultiProvider(
           providers: [
+            ChangeNotifierProvider(builder: (context) => FeedListModel()),
             ChangeNotifierProvider(builder: (context) => MachineListModel()),
             ChangeNotifierProvider(builder: (context) => BusyIndicator()),
           ],

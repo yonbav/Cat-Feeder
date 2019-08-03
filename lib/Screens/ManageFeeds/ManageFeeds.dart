@@ -15,8 +15,8 @@ class ManageFeeds extends StatelessWidget {
     final feedsProvider = Provider.of<FeedListModel>(context, listen: false);
 
     busyIndicatorProvider.setIsBusy(true);
-    feedsProvider.reloadAllFromServer();
-    busyIndicatorProvider.setIsBusy(false);
+    feedsProvider.reloadAllFromServer()
+        .then((_) => busyIndicatorProvider.setIsBusy(false));
 
     return new Scaffold(
       appBar: new MyAppBar(

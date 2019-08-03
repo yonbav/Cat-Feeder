@@ -8,7 +8,7 @@ class MachineListModel extends ChangeNotifier {
 
   List<MachineModel> get machines => List.unmodifiable(_machines);
 
-  void reloadAllFromServer() async {
+  Future reloadAllFromServer() async {
     print("Load All machines from server");
     var machines = await getAllMachines();
     _machines.clear();
