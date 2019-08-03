@@ -29,7 +29,7 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
     final machinesProvider =
         Provider.of<MachineListModel>(context, listen: false);
 
-    busyIndicatorProvider.setIsBusy(true);
+    busyIndicatorProvider.setIsBusyNoNotify(true);
     machinesProvider.reloadAllFromServer()
         .then((_) => busyIndicatorProvider.setIsBusy(false));
     super.initState();
@@ -103,6 +103,9 @@ class _FeedMachineManagerState extends State<FeedMachineManager> {
       await feedsProvider.add(feedsToSave.elementAt(i), context);
     }
 
+    // Canceling the selection
+    devicesToCreateFeed.forEach((machine) => machine.isSelected = false);
+    
     //Stopping busy indicator
     busyIndicatorProvider.setIsBusy(false);
   }

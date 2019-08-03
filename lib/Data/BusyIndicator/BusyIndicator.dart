@@ -5,8 +5,12 @@ class BusyIndicator extends ChangeNotifier {
 
   bool get isBusy => _isBusy;
 
-  void setIsBusy(bool value) {
+  void setIsBusyNoNotify(bool value) {
     _isBusy = value;
+  }
+  
+  void setIsBusy(bool value) {
+    setIsBusyNoNotify(value);
     notifyListeners();
   }
 }

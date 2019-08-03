@@ -22,7 +22,7 @@ class _FeedListManagerState extends State<FeedListManager> {
     final busyIndicatorProvider = Provider.of<BusyIndicator>(context, listen: false);
     final feedsProvider = Provider.of<FeedListModel>(context, listen: false);
 
-    busyIndicatorProvider.setIsBusy(true);
+    busyIndicatorProvider.setIsBusyNoNotify(true);
     feedsProvider.reloadAllFromServer()
         .then((_) => busyIndicatorProvider.setIsBusy(false));
     super.initState();

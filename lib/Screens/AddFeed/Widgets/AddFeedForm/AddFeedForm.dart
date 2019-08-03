@@ -40,7 +40,7 @@ class _AddFeedFormState extends State<AddFeedForm> {
 
     _feed = FeedModel.fromDevice("000");
 
-    busyIndicatorProvider.setIsBusy(true);
+    busyIndicatorProvider.setIsBusyNoNotify(true);
     machinesProvider.reloadAllFromServer().then((_) {
       busyIndicatorProvider.setIsBusy(false);
       _devices.addAll(machinesProvider.machines);
