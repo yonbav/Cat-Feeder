@@ -1,0 +1,2 @@
+void initLed();
+void blinkLed();

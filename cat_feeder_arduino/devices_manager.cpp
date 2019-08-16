@@ -4,6 +4,7 @@
 
 const int MAX_DEVICES = 14;
 
+Servo servo;
 device _devices[MAX_DEVICES];
 
 bool checkIsPinValid (int pin) {  
@@ -20,22 +21,23 @@ bool checkIsPinValid (int pin) {
   return true;
 }
 
-void attachDevice(int deviceId, int pin) {   
-  if (!checkIsPinValid(pin))
+void attachDevice(int devicePin) {   
+  if (!checkIsPinValid(devicePin))
   {
+    Serial.println("Failed initializing device!");
     return;
   }
 
   // Creating the new device
-  device* newDevice = new device(deviceId, pin);
-  _devices[pin] = *newDevice;
+  device* newDevice = new device(devicePin);
+  _devices[devicePin] = *newDevice;
 }
 
-void feedFromDevice(int pin) {    
-  if (!checkIsPinValid(pin))
+void feedFromDevice(int devicePin) {
+  if (!checkIsPinValid(devicePin))
   {
     return;
   }
   
-  _devices[pin].feedFromDevice();  
+  _devices[devicePin].feedFromDevice();  
 }

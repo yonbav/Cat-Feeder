@@ -2,12 +2,11 @@
 
 class device {
   public:
-    int deviceId;
-    Servo servo;
     int servoPin;
+    int pos;
     
     device();
-    device(int id, int pin);
+    device(int pin);
 
     void feedFromDevice();
 };
