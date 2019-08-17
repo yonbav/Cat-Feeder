@@ -29,16 +29,20 @@ void device::feedFromDevice()
     
   }
   
-  for (pos = 0; pos <= 160; pos += 1) { 
+  for (pos = 0; pos <= 80; pos += 2) { 
     // in steps of 1 degree
     curServo.write(pos);              
-    delay(10);                       
+    delay(20);                       
   }
-  for (pos = 160; pos >= 0; pos -= 1) { 
+
+  delay(1000);
+  
+  for (pos = 80; pos >= 0; pos -= 2) { 
     curServo.write(pos);              
-    delay(10);                       
+    delay(20);                       
   }
   
-  Serial.println("ending feed.");
+  Serial.print("ending feed for device id: ");
+  Serial.println(servoPin);
   curServo.detach();
 }

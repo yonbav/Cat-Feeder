@@ -6,3 +6,6 @@ void pingGoogle();
 bool isDeviceNeedToFeed(int deviceId);
 void deleteFeedFromServer(String feedId);
 String GetResponse();
+bool IsResponseContainsFeeds(String response);
+void RemoveAllFeedsInResponse(String response);
+int GetFeedsCountFromResponse(String response);
