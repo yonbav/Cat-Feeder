@@ -1,5 +1,3 @@
-#include <SPI.h>
-#include <WiFiNINA.h>
 #include "network.h"
 #include "devices_manager.h"
 #include "led_manager.h"
@@ -41,4 +39,8 @@ void loop() {
       feedFromDevice(configuredDevices[pos]);
     }
   }
+
+  Serial.println("Going to Sleep!");
+  delay(30 * 1000);
+  Serial.println("Waking up!");
 }

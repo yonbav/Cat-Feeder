@@ -1,5 +1,6 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include <ArduinoHttpClient.h>
 #include <ArduinoJson.h>
 #include "arduino_secrets.h"
 #include "network.h"
@@ -8,30 +9,22 @@
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;     // the WiFi radio's status
-int serverPort = 80;
+int serverPort = 443;
 
 // Response
 const char ItemsTag[] = "Items";
 const char CountTag[] = "Count";
 const char IdTag[]    = "Id";
-String FeedsToDelete[10];
 StaticJsonDocument<200> doc;
 
 // server address
-const char domain[] = "www.amazonaws.com";
-const char location[] = "https://irw3hewccf.execute-api.us-east-2.amazonaws.com/PROD/";
-const char host[] = "irw3hewccf.execute-api.us-east-2.amazonaws.com/PROD/";
-const char getFeedsPath[] = "/PROD/%7Bfeedsapi+%7D?TableName=Feeds&DeviceId=11";
+const char server[] = "irw3hewccf.execute-api.us-east-2.amazonaws.com";
+const String getFeedsPath = "/PROD/%7Bfeedsapi+%7D?TableName=Feeds&DeviceId=";
 const char deleteFeedsPath[] = "/PROD/%7Bfeedsapi+%7D";
-const char googleHostName[] = "www.google.com";
-
-// Specify IP address or hostname
-String postData;
-String Response;
-int pingResult;
 
 // Initialize the Wifi client library
-WiFiClient client;
+WiFiSSLClient wifi;
+HttpClient client = HttpClient(wifi, server, serverPort);
 
 ///////////////////////////////////////////////////////// Network Methods /////////////////////////////////////////////////////////
 void connectToNetwork() {
@@ -62,24 +55,6 @@ void connectToNetwork() {
   Serial.println("You're connected to the network");
   printCurrentNet();
   printWiFiData();
-}
-
-void pingGoogle() {
-
-  Serial.print("Pinging ");
-  Serial.print(googleHostName);
-  Serial.print(": ");
-
-  pingResult = WiFi.ping(googleHostName);
-
-  if (pingResult >= 0) {
-    Serial.print("SUCCESS! RTT = ");
-    Serial.print(pingResult);
-    Serial.println(" ms");
-  } else {
-    Serial.print("FAILED! Error code: ");
-    Serial.println(pingResult);
-  }
 }
 
 void printWiFiData() {
@@ -138,79 +113,31 @@ void printMacAddress(byte mac[]) {
 
 ///////////////////////////////////////////////////////// Server Methods /////////////////////////////////////////////////////////
 
-void deleteFeedFromServer(String feedId) {
-  Serial.print("Deleting Feed id: ");
-  Serial.print(feedId);
-  Serial.println(" from server.");
-
-  postData = "{\"Key\": { \"" + feedId + "\" : \"3\" }, \"TableName\": \"Feeds\"}";
-
-  // close any connection before send a new request.
-  // This will free the socket on the Nina module
-  client.stop();
-
-  if (!client.connect(domain, serverPort)) {
-    // if you couldn't make a connection:
-    Serial.println("connection failed");
-    return;
-  }
-
-  client.print("POST ");
-  client.print(deleteFeedsPath);
-  client.println(" HTTP/1.1");
-  client.print("Host: ");
-  client.println(host);
-  client.println("Connection: keep-alive");
-  client.println("Content-Type: application/json");
-  client.print("Content-Length: ");
-  client.println(postData.length());
-  client.println();
-  client.print(postData);
-
-  // wait 5 seconds for response.
-  delay(5 * 1000);
-  Response = GetResponse();
-}
-
-
 bool isDeviceNeedToFeed(int deviceId) {
-
-  // close any connection before send a new request.
-  // This will free the socket on the Nina module
-  client.stop();
-
   Serial.print("Checking if device ");
   Serial.print(deviceId);
   Serial.println(" needs to feed the cat.");
 
-  // if there's a successful connection:
-  if (!client.connect(domain, serverPort)) {
+  // Creating the request path with the right id
+  String feedsPath = getFeedsPath + String(deviceId);
+  int strLen = feedsPath.length() + 1;
+  char feedsPathCharArray[strLen];
+  feedsPath.toCharArray(feedsPathCharArray, strLen );
 
-    // if you couldn't make a connection:
-    Serial.println("connection failed!");
-    return false;
-  }
-
-  // send the HTTP GET request:
-  client.print("GET ");
-  client.print(getFeedsPath);
-  client.println(" HTTP/1.1");
-  client.print("Host: ");
-  client.println(host);
-  client.println("User-Agent: ArduinoWiFi/1.1");
-  client.println("Connection: keep-alive");
-  client.print("Location: ");
-  client.println(location);
-  client.println();
-
-  // wait 10 seconds for response.
-  delay(10 * 1000);
-  Response = GetResponse();
-  //Response = "{\"Items\":[{\"Id\":\"6c0b3d6d-ffc1-4d25-968f-35f7e1078a83\"},{\"Id\":\"cf9a3ba3-f32d-4efc-83bb-effa9c7dd1ad\"}],\"Count\":2,\"ScannedCount\":3}";
-  //Response = "{\"Items\":[],\"Count\":0,\"ScannedCount\":3}";
+  Serial.println(feedsPathCharArray);
   
-  // if the response recieved does not contain any feeds we return false;
-  if (!IsResponseContainsFeeds(Response))
+  client.get(feedsPathCharArray);
+
+  // read the status code and body of the response
+  int statusCode = client.responseStatusCode();
+  String response = client.responseBody();
+
+  Serial.print("StatusCode: ");
+  Serial.println(statusCode);
+  Serial.print("Response: ");
+  Serial.println(response );
+
+  if (GetFeedsCountFromResponse(response) <= 0)
   {
     Serial.print("Device ");
     Serial.print(deviceId);
@@ -219,35 +146,37 @@ bool isDeviceNeedToFeed(int deviceId) {
   }
 
   // We remove from server all feeds found in the response and return true;
-  RemoveAllFeedsInResponse(Response);
+  RemoveAllFeedsInResponse(response);
   return true;
 }
 
-String GetResponse() {
-  String _response = "";
-  // if there are incoming bytes available
-  // from the server, read them and print them:
-  while (client.available()) {
-    char c = client.read();
-    _response.concat(c);
-  }
 
-  //Serial.println("-----------------------------------------");
-  //Serial.print("Response: ");
-  //Serial.println(_response);
-  //Serial.println("-----------------------------------------");
-  return _response;
+void deleteFeedFromServer(String feedId) {
+  Serial.print("Deleting Feed id: ");
+  Serial.print(feedId);
+  Serial.println(" from server.");
+
+  String contentType = "application/json";
+  String postData = "{    \"Key\": {        \"Id\": \"" + feedId + "\"    },    \"TableName\": \"Feeds\" }";
+
+  client.post(getFeedsPath, contentType, postData);
+
+  // read the status code and body of the response
+  int statusCode = client.responseStatusCode();
+  String response = client.responseBody();
+
+  Serial.print("StatusCode: ");
+  Serial.println(statusCode);
+  Serial.print("Response: ");
+  Serial.println(response );
 }
 
-bool IsResponseContainsFeeds(String response) {
-  return GetFeedsCountFromResponse(response) > 0;
-}
 
 void RemoveAllFeedsInResponse(String response) {
   int feedsCount = GetFeedsCountFromResponse(response);
 
   // if the response is not in the expected format success response
-  if (Response.indexOf(CountTag) < 0 || Response.indexOf(ItemsTag) < 0)
+  if (response.indexOf(CountTag) < 0 || response.indexOf(ItemsTag) < 0)
   {
     Serial.println("Response received was not in the expected format!");
     return 0;
@@ -272,7 +201,7 @@ void RemoveAllFeedsInResponse(String response) {
 
 int GetFeedsCountFromResponse(String response) {
   // if the response is not in the expected format success response
-  if (Response.indexOf(CountTag) < 0 || Response.indexOf(ItemsTag) < 0)
+  if (response.indexOf(CountTag) < 0 || response.indexOf(ItemsTag) < 0)
   {
     Serial.println("Response received was not in the expected format!");
     return 0;

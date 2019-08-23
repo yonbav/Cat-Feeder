@@ -34,8 +34,6 @@ void device::feedFromDevice()
     curServo.write(pos);              
     delay(20);                       
   }
-
-  delay(1000);
   
   for (pos = 80; pos >= 0; pos -= 2) { 
     curServo.write(pos);              
