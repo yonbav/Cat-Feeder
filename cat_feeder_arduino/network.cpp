@@ -124,8 +124,7 @@ bool isDeviceNeedToFeed(int deviceId) {
   char feedsPathCharArray[strLen];
   feedsPath.toCharArray(feedsPathCharArray, strLen );
 
-  Serial.println(feedsPathCharArray);
-  
+  // Creating the get http request
   client.get(feedsPathCharArray);
 
   // read the status code and body of the response

@@ -3,8 +3,6 @@
 #include "device.h"
 
 const int MAX_DEVICES = 14;
-
-Servo servo;
 device _devices[MAX_DEVICES];
 
 bool checkIsPinValid (int pin) {  
